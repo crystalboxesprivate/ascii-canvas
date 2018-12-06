@@ -11,10 +11,19 @@ pub struct ConstantBuffer {
 }
 
 pub trait PixelProcessor {
-  fn compute(&self, coord: PixelCoordinate, data: &ConstantBuffer, buffer: &display::ImageBuffer) -> u8;
+  fn compute(
+    &self,
+    coord: PixelCoordinate,
+    data: &ConstantBuffer,
+    buffer: &display::ImageBuffer,
+  ) -> u8;
 }
 
-pub fn compute(buffer: &mut display::ImageBuffer, data: &ConstantBuffer, pixel_processor: &Box<dyn PixelProcessor>) {
+pub fn compute(
+  buffer: &mut display::ImageBuffer,
+  data: &ConstantBuffer,
+  pixel_processor: &Box<dyn PixelProcessor>,
+) {
   for index in 0..buffer.data.len() {
     let index_uv = (index % buffer.width, index / buffer.height);
     let coord = PixelCoordinate {
@@ -28,11 +37,15 @@ pub fn compute(buffer: &mut display::ImageBuffer, data: &ConstantBuffer, pixel_p
   }
 }
 // test stuff
-pub struct Waves {
-}
+pub struct Waves {}
 
 impl PixelProcessor for Waves {
-  fn compute(&self, coord: PixelCoordinate, data: &ConstantBuffer, buffer: &display::ImageBuffer) -> u8 {
+  fn compute(
+    &self,
+    coord: PixelCoordinate,
+    data: &ConstantBuffer,
+    buffer: &display::ImageBuffer,
+  ) -> u8 {
     let uv = (coord.uv.0 * -1_f32 * 2_f32, coord.uv.1 * -1_f32 * 2_f32);
     let time = data.time as f32;
     let result = (((time + 3.0 * uv.1).cos() * 2.0 * uv.0 + time).sin()).abs();

@@ -20,17 +20,23 @@ pub fn clear_screen() {
     print!("{}[2J", 27 as char);
 }
 
-pub fn draw(screen_buffer: &ImageBuffer, greyscale_map: &str) {
+pub fn draw(screen_buffer: &ImageBuffer, greyscale_map: &str, ascii_buffer: &mut Vec<char>) {
     let greyscale_map: Vec<char> = greyscale_map.chars().collect();
+    let char_buffer_width = screen_buffer.width + 1;
+
     for y in 0..screen_buffer.height {
-        let scanline = &screen_buffer.data[screen_buffer.width * y..screen_buffer.width * (y + 1)];
-        let scanline_transformed: String = scanline
-            .iter()
-            .map(|x| {
-                let index = (*x as f32) / 255.0 * (greyscale_map.len() as f32);
-                let index = cmp::min(greyscale_map.len() - 1, index as usize);
-                greyscale_map[index]
-            }).collect();
-        println!("{}", scanline_transformed);
+        for x in 0..screen_buffer.width {
+            let index = y * screen_buffer.width + x;
+            let remapped_value =
+                (screen_buffer.data[index] as f32) / 255.0 * (greyscale_map.len() as f32);
+            let remapped_value = cmp::min(greyscale_map.len() - 1, remapped_value as usize);
+
+            let index = y * char_buffer_width + x;
+            ascii_buffer[index] = greyscale_map[remapped_value];
+        }
+        ascii_buffer[y * char_buffer_width + char_buffer_width - 1] = '\n';
     }
+
+    let dst: String = ascii_buffer.iter().collect();
+    print!("{}", dst);
 }

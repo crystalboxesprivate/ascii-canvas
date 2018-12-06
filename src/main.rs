@@ -1,22 +1,20 @@
-use std::time::Duration;
-use std::thread;
+extern crate ascii_canvas;
 
-mod display;
-mod pixel_processing;
+// TODO
+// Arguments for options
+// BMP reader and processor
+// OBJ loader
 
 fn main() {
-    let mut screen_buffer = display::ImageBuffer::new(60, 30);
-    let mut time = 0.0;
-    let mut pixel_processor = pixel_processing::Waves {
-        data: pixel_processing::PixelProcessorData::default(),
-    };
+  let rows = 80;
+  let cols = 35;
+  let frame_delay_ms = 22.0;
 
-    loop {
-        display::clear_screen();
-        pixel_processor.data.time = time;
-        pixel_processing::compute(&mut screen_buffer, &pixel_processor);
-        display::draw(&screen_buffer, "█▇▆▅▄▃▂▁ ");
-        thread::sleep(Duration::from_millis(1));
-        time += 0.0023;
-    };
+  let mut app = ascii_canvas::App::new(
+    rows,
+    cols,
+    frame_delay_ms,
+    Box::new(ascii_canvas::pixel_processing::Waves {}),
+  );
+  app.run();
 }

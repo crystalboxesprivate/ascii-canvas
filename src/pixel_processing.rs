@@ -1,6 +1,4 @@
 use super::display;
-use std::rc::Rc;
-use std::cell::RefCell;
 
 pub struct PixelCoordinate {
   index: (i32, i32),

@@ -1,0 +1,6 @@
+[package]
+name = "ascii-canvas"
+version = "0.1.0"
+authors = ["Oleg Pustovit <ursus95@gmail.com>"]
+
+[dependencies]

@@ -6,7 +6,7 @@ fn main() {
     Box::new(ascii_canvas::pixel_processing::TextureSample {}),
   );
 
-  match ascii_canvas::bmp_reader::load_rgb_24bit("assets/grid_rectangle.bmp") {
+  match ascii_canvas::bmp_reader::load_rgb_24bit("assets/hello.bmp") {
     Ok(x) => app.shared_data.set_texture("MainTex", x),
     Err(x) => println!("{}", x),
   };

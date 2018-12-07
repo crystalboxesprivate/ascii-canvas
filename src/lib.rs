@@ -126,3 +126,11 @@ pub fn read_options_from_args() -> AppOptions {
 
   app_options
 }
+
+#[test]
+fn bmp_read() {
+    match bmp_reader::load_rgb_24bit("assets/grid_rectangle.bmp") {
+      Ok(x) => assert_eq!(x.width, 400),
+      Err(x) => panic!(x),
+    };
+}

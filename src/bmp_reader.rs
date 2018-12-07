@@ -11,7 +11,7 @@ pub fn load_rgb_24bit(filename: &str) -> Result<display::ImageBuffer, &str> {
   };
 
   let mut header_info = [0_u8; 54];
-  if let Err(x) = file.read(&mut header_info) {
+  if let Err(_) = file.read(&mut header_info) {
     return Err("Couldn't read header");
   }
 
@@ -40,7 +40,7 @@ pub fn load_rgb_24bit(filename: &str) -> Result<display::ImageBuffer, &str> {
   let pixel_count = (resolution.0 * resolution.1) as usize;
   let size = pixel_count * 3;
   let mut pixels_raw = vec![0_u8; size];
-  if let Err(x) = file.read(&mut pixels_raw) {
+  if let Err(_) = file.read(&mut pixels_raw) {
     return Err("Couldn't read pixels")
   }
   let pixels_raw = pixels_raw;

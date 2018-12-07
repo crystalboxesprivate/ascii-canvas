@@ -33,18 +33,19 @@ pub fn load_rgb_24bit(filename: &str) -> Result<display::ImageBuffer, &str> {
 
   write_uint_from_header(28, 2, get_mut_u8_ptr(&mut bit_count));
   if bit_count != 24 {
-    return Err("Not a 24 bit bmp.")
+    return Err("Not a 24 bit bmp.");
   }
 
   let pixel_count = resolution.0 * resolution.1;
   let size = pixel_count * 3;
   let mut pixels_raw = vec![0_u8; size];
   if let Err(_) = file.read(&mut pixels_raw) {
-    return Err("Couldn't read pixels")
+    return Err("Couldn't read pixels");
   }
   let pixels_raw = pixels_raw;
 
   let mut pixels = vec![0_u8; pixel_count];
+  let rgb_weights: (f32, f32, f32) = (0.3, 0.59, 0.11);
   for y in 0..resolution.1 {
     for x in 0..resolution.0 {
       let index = y * resolution.0 + x;
@@ -53,7 +54,7 @@ pub fn load_rgb_24bit(filename: &str) -> Result<display::ImageBuffer, &str> {
         pixels_raw[index * 3 + 1] as f32 / 255.0,
         pixels_raw[index * 3 + 0] as f32 / 255.0,
       );
-      let greyscale = 0.3 * rgb.0 + 0.59 * rgb.1 * 0.11 * rgb.2;
+      let greyscale = rgb_weights.0 * rgb.0 + rgb_weights.1 * rgb.1 + rgb_weights.2 * rgb.2;
       let index = (resolution.1 - 1 - y) * resolution.0 + x;
       pixels[index] = (greyscale * 255.0) as u8;
     }

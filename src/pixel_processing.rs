@@ -1,4 +1,5 @@
 use super::display;
+use super::vec2;
 use std::cmp;
 use std::collections::HashMap;
 
@@ -66,5 +67,25 @@ pub struct TextureSample {}
 impl PixelProcessor for TextureSample {
   fn compute(&self, coord: PixelCoordinate, data: &ConstantBuffer) -> u8 {
     data.sample_texture("MainTex", coord.uv)
+  }
+}
+
+pub struct WavesWithTexture {}
+impl PixelProcessor for WavesWithTexture {
+  fn compute(&self, coord: PixelCoordinate, data: &ConstantBuffer) -> u8 {
+    let time = data.time as f32;
+    let mut uv = vec2::from(coord.uv);
+    let inituv = (uv - 0.5) * 0.5 + 0.5;
+
+    uv = (uv - 0.5) * 0.2 + 0.5;
+    uv = uv.lerp(
+      vec2::new(
+        (time * 0.1).cos().abs() * ((time * uv.y * 0.02).tan() * 0.2).abs(),
+        uv.y,
+      ),
+      uv.y.sin() + time.sin(),
+    );
+    uv = inituv.lerp(uv, (time * 0.2).cos());
+    data.sample_texture("MainTex", uv.as_tuple())
   }
 }

@@ -5,6 +5,7 @@ use std::time::Duration;
 pub mod display;
 pub mod pixel_processing;
 pub mod bmp_reader;
+pub mod vec2;
 
 pub struct AppOptions {
   width: usize,
@@ -17,9 +18,9 @@ impl AppOptions {
   fn new() -> AppOptions {
     AppOptions {
       width: 80,
-      height: 40,
+      height: 25,
       frame_delay_ms: 33.333333,
-      ascii_gradient_type: 0,
+      ascii_gradient_type: 3,
     }
   }
 }

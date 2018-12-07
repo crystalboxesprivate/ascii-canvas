@@ -4,6 +4,7 @@ use std::time::Duration;
 
 pub mod display;
 pub mod pixel_processing;
+pub mod bmp_reader;
 
 pub struct AppOptions {
   width: usize,
@@ -27,7 +28,7 @@ pub struct App {
   screen_buffer: display::ImageBuffer,
   ascii_buffer: Vec<char>,
   pixel_processor: Box<dyn pixel_processing::PixelProcessor>,
-  shared_data: pixel_processing::ConstantBuffer,
+  pub shared_data: pixel_processing::ConstantBuffer,
   refresh_rate: f64, // ms
   gradient_map: String,
 }

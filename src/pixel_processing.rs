@@ -1,4 +1,5 @@
 use super::display;
+use std::collections::HashMap;
 
 pub struct PixelCoordinate {
   index: (i32, i32),
@@ -8,6 +9,13 @@ pub struct PixelCoordinate {
 #[derive(Default)]
 pub struct ConstantBuffer {
   pub time: f64,
+  pub textures: HashMap<String, display::ImageBuffer>,
+}
+
+impl ConstantBuffer {
+  pub fn set_texture(&mut self, name: &str, texture: display::ImageBuffer) {
+    self.textures.insert(name.to_string(), texture);
+  }
 }
 
 pub trait PixelProcessor {
